@@ -11,6 +11,9 @@ steps:
   inputs:
     targetType: 'inline'
     script: |
+      git config --global user.email "joelantowilliams@.com"
+      git config --global user.name "Joelanto"
+
       git clone https://github.com/Joel981/master-projectrepo.git
       # Navigate to the directory where the file to be copied is located
       cd master-projectrepo/workflow/
