@@ -1,0 +1,24 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger:
+- master
+
+pool:
+  vmImage: ubuntu-latest
+
+steps:
+- checkout: self
+- checkout: git://https://github.com/Joel981/master-projectrepo.git
+- script: |
+    mkdir /tmp/my-files
+    cp master-projectrepo/workflow/sampleyaml.yml /tmp/my-files
+- task: CopyFiles@2
+  inputs:
+    SourceFolder: '/tmp/my-files'
+    Contents: 'sampleyaml.yml'
+    TargetFolder: 'project1/workflow/sampleyaml.yml'
+- script: |
+    rm -rf /tmp/my-files
