@@ -29,13 +29,13 @@ jobs:
       # set the path to the YAML files relative to the root of the repository
       yaml_path="workflow/sampleyaml.yml"
       # update the YAML files in the other repositories
-      for repo in repo1 repo2; do
-        git clone --branch main $(eval echo $"$(echo ${{resources.repositories.${repo}.repository}}))" $repo
-        cp $yaml_path $repo
-        cd $repo
+      for main in repo1 repo2; do
+        git clone --branch main $(eval echo $"$(echo ${{resources.repositories.${main}.repository}}))" $main
+        cp $yaml_path $main
+        cd $main
         git add $yaml_path
         git commit -m "Update YAML files from main repository"
         git push
         cd ..
-        rm -rf $repo
+        rm -rf $main
       done
