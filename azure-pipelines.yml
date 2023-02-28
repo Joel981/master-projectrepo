@@ -11,7 +11,7 @@ pool:
 
 steps:
 - checkout: self
-- checkout: git://https://github.com/Joel981/master-projectrepo.git
+- checkout: git://Joel981/master-projectrepo.git
 - script: |
     mkdir /tmp/my-files
     cp master-projectrepo/workflow/sampleyaml.yml /tmp/my-files
