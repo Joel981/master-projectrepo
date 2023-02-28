@@ -4,7 +4,9 @@
 # https://aka.ms/yaml
 
 trigger:
-- master
+  branches:
+    include:
+      - - main
 
 resources:
   repositories:
@@ -39,3 +41,5 @@ jobs:
         cd ..
         rm -rf $main
       done
+  env:
+    GITHUB_TOKEN: $(github-token)
