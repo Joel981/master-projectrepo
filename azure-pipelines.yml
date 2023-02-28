@@ -6,19 +6,36 @@
 trigger:
 - master
 
-pool:
-  vmImage: ubuntu-latest
-
-steps:
-- checkout: self
-- checkout: git://github.com/Joel981/master-projectrepo.git
-- script: |
-    mkdir /tmp/my-files
-    cp master-projectrepo/workflow/sampleyaml.yml /tmp/my-files
-- task: CopyFiles@2
-  inputs:
-    SourceFolder: '/tmp/my-files'
-    Contents: 'sampleyaml.yml'
-    TargetFolder: 'project1/workflow/sampleyaml.yml'
-- script: |
-    rm -rf /tmp/my-files
+resources:
+  repositories:
+  - repository: main
+    type: git
+    name: https://github.com/Joel981/master-projectrepo.git
+    ref: refs/heads/main
+  - repository: repo1
+    type: git
+    name: https://github.com/Joel981/project1.git
+    ref: refs/heads/main
+  - repository: repo2
+    type: git
+    name: https://github.com/Joel981/Project2.git
+    ref: refs/heads/main
+  # add more repositories as needed
+jobs:
+- job: update-yaml-files
+  steps:
+  - checkout: main
+  - script: |
+      # set the path to the YAML files relative to the root of the repository
+      yaml_path="workflow/sampleyaml.yml"
+      # update the YAML files in the other repositories
+      for repo in repo1 repo2; do
+        git clone --branch main $(eval echo $"$(echo ${{resources.repositories.${repo}.repository}}))" $repo
+        cp $yaml_path $repo
+        cd $repo
+        git add $yaml_path
+        git commit -m "Update YAML files from main repository"
+        git push
+        cd ..
+        rm -rf $repo
+      done
